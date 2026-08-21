@@ -22,13 +22,14 @@
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f3f4f6;
+            background: #f3f4f6;
         }
 
         /* =========================================================
-           명찰 실제 물리 크기
-           가로 6.8cm × 세로 2.91cm
+           명찰 실제 크기
+           6.8cm × 2.91cm
            ========================================================= */
+
         .nametag-canvas {
             width: 6.8cm;
             height: 2.91cm;
@@ -36,10 +37,9 @@
             min-width: 6.8cm;
             min-height: 2.91cm;
 
-            background-color: #ffffff;
-            border: 1px solid #a1a1aa;
+            background: #fff;
 
-            box-sizing: border-box;
+            border: 1px solid #a1a1aa;
 
             display: flex;
             align-items: center;
@@ -47,6 +47,7 @@
             padding: 0.1cm;
 
             position: relative;
+
             overflow: hidden;
 
             flex-shrink: 0;
@@ -57,176 +58,27 @@
 
         /* =========================================================
            화면 미리보기
-           실제 명찰은 6.8cm × 2.91cm.
-           화면에서는 보기 좋게 확대해서 보여줌.
            ========================================================= */
 
         .screen-preview-area {
             display: grid;
+
             grid-template-columns: repeat(2, 6.8cm);
+
             gap: 0.5cm;
 
-            /*
-             * 화면에서는 약 1.45배 정도 크게 보이도록 확대
-             * 인쇄 시에는 아래 @media print에서 transform 제거
-             */
-            transform: scale(1.05);
+            transform: scale(1);
+
             transform-origin: center center;
         }
 
 
-        /* =========================================================
-           인쇄 전용 영역
-           화면에서는 보이지 않음.
-           ========================================================= */
-
-        .print-only-area {
-            display: none;
-        }
-
-
-        /* =========================================================
-           인쇄 설정
-           ========================================================= */
-
-        @media print {
-
-            @page {
-                size: A4 portrait;
-                margin: 0;
-            }
-
-            html,
-            body {
-                width: 210mm;
-                min-width: 210mm;
-                height: 297mm;
-                min-height: 297mm;
-
-                margin: 0 !important;
-                padding: 0 !important;
-
-                background: #ffffff !important;
-            }
-
-
-            /* 화면용 UI 전부 숨김 */
-            .screen-ui {
-                display: none !important;
-            }
-
-
-            /* =====================================================
-               실제 인쇄 영역
-               A4 좌측 1cm / 상단 1cm
-               ===================================================== */
-
-            .print-only-area {
-                display: grid !important;
-
-                position: absolute !important;
-
-                left: 1cm !important;
-                top: 1cm !important;
-
-                width: 14cm !important;
-
-                margin: 0 !important;
-                padding: 0 !important;
-
-                grid-template-columns: 6.8cm 6.8cm !important;
-                grid-template-rows: 2.91cm 2.91cm !important;
-
-                column-gap: 0.4cm !important;
-                row-gap: 0.4cm !important;
-
-                transform: none !important;
-
-                background: transparent !important;
-
-                box-shadow: none !important;
-
-                overflow: visible !important;
-            }
-
-
-            /* =====================================================
-               인쇄되는 명찰
-               반드시 6.8cm × 2.91cm
-               ===================================================== */
-
-            .print-only-area .nametag-canvas {
-                width: 6.8cm !important;
-                height: 2.91cm !important;
-
-                min-width: 6.8cm !important;
-                min-height: 2.91cm !important;
-
-                max-width: 6.8cm !important;
-                max-height: 2.91cm !important;
-
-                border: 1px solid #000000 !important;
-
-                box-shadow: none !important;
-
-                margin: 0 !important;
-
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-
-                transform: none !important;
-
-                overflow: hidden !important;
-            }
-
-
-            .print-only-area img {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-            }
-
-
-            /*
-             * 인쇄할 때 Tailwind의 화면용 스타일 영향을
-             * 최대한 받지 않도록 명찰 내부 크기 고정
-             */
-
-            .print-only-area .logo-area {
-                width: 52% !important;
-                height: 100% !important;
-                flex-shrink: 0 !important;
-            }
-
-            .print-only-area .text-area {
-                width: 48% !important;
-                height: 100% !important;
-                flex-shrink: 0 !important;
-            }
-
-            .print-only-area .position-text {
-                font-size: 0.55cm !important;
-                line-height: 1.1 !important;
-            }
-
-            .print-only-area .name-text {
-                font-size: 0.82cm !important;
-                line-height: 1 !important;
-            }
-
-            .print-only-area .divider {
-                border-bottom: 2px solid #000000 !important;
-            }
-        }
-
-
-        /* =========================================================
-           작은 화면 대응
-           ========================================================= */
+        /* 작은 화면 */
 
         @media screen and (max-width: 900px) {
 
             .screen-preview-area {
-                transform: scale(1.15);
+                transform: scale(0.9);
             }
         }
 
@@ -234,7 +86,7 @@
         @media screen and (max-width: 700px) {
 
             .screen-preview-area {
-                transform: scale(0.9);
+                transform: scale(0.75);
             }
         }
     </style>
@@ -243,19 +95,32 @@
 
 <body class="min-h-screen">
 
+
     <!-- =========================================================
-         화면용 UI
+         전체 화면
          ========================================================= -->
 
-    <div class="screen-ui min-h-screen flex items-center justify-center p-3 sm:p-5">
+    <div class="min-h-screen flex items-center justify-center p-3 sm:p-5">
+
 
         <div
-            class="w-full max-w-[1700px] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[90vh]"
+            class="
+                w-full
+                max-w-[1700px]
+                bg-white
+                rounded-2xl
+                shadow-2xl
+                overflow-hidden
+                flex
+                flex-col
+                lg:flex-row
+                min-h-[90vh]
+            "
         >
+
 
             <!-- =================================================
                  왼쪽 편집 영역
-                 기존 320~350px → 420~460px
                  ================================================= -->
 
             <div
@@ -277,25 +142,28 @@
 
                 <div>
 
-                    <!-- 타이틀 -->
-
                     <div class="mb-5 pb-4 border-b border-gray-200">
 
                         <h1
-                            class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight"
+                            class="
+                                text-2xl
+                                sm:text-3xl
+                                font-bold
+                                text-gray-900
+                            "
                         >
                             블리비 임시명찰
                         </h1>
 
                         <p class="text-sm text-gray-500 mt-1">
-                            
+                            4개 동시 작성 및 일괄 인쇄
                         </p>
 
                     </div>
 
 
                     <!-- =================================================
-                         입력 항목
+                         명찰 입력
                          ================================================= -->
 
                     <div class="space-y-4">
@@ -388,13 +256,11 @@
 
                             </div>
 
-
                             <p class="text-xs text-gray-400 mt-2">
                                 원장/의사 또는 코디네이터/간호조무사/피부관리사
                             </p>
 
                         </div>
-
 
 
                         <!-- 명찰 2 -->
@@ -484,13 +350,11 @@
 
                             </div>
 
-
                             <p class="text-xs text-gray-400 mt-2">
                                 원장/의사 또는 코디네이터/간호조무사/피부관리사
                             </p>
 
                         </div>
-
 
 
                         <!-- 명찰 3 -->
@@ -580,13 +444,11 @@
 
                             </div>
 
-
                             <p class="text-xs text-gray-400 mt-2">
                                 원장/의사 또는 코디네이터/간호조무사/피부관리사
                             </p>
 
                         </div>
-
 
 
                         <!-- 명찰 4 -->
@@ -676,7 +538,6 @@
 
                             </div>
 
-
                             <p class="text-xs text-gray-400 mt-2">
                                 원장/의사 또는 코디네이터/간호조무사/피부관리사
                             </p>
@@ -695,7 +556,7 @@
                 <div class="pt-5 mt-5 border-t border-gray-200">
 
                     <button
-                        onclick="window.print()"
+                        onclick="printNameTags()"
                         class="
                             w-full
                             bg-black
@@ -724,7 +585,7 @@
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                                 stroke-width="2"
-                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H9a2 2 0 00-2 2v4m8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
                             ></path>
                         </svg>
 
@@ -732,9 +593,8 @@
 
                     </button>
 
-
                     <p class="text-xs text-gray-400 text-center mt-3">
-                        인쇄 크기: 6.8cm × 2.91cm
+                        실제 크기 6.8cm × 2.91cm
                     </p>
 
                 </div>
@@ -742,9 +602,8 @@
             </div>
 
 
-
             <!-- =================================================
-                 오른쪽 화면 미리보기
+                 오른쪽 미리보기
                  ================================================= -->
 
             <div
@@ -763,14 +622,13 @@
                 "
             >
 
-                <div class="text-center mb-12">
+                <div class="text-center mb-10">
 
                     <span
                         class="
                             text-sm
                             font-bold
                             text-gray-500
-                            uppercase
                             tracking-wider
                             bg-gray-300/70
                             px-4
@@ -784,11 +642,9 @@
                 </div>
 
 
-                <!-- 화면 미리보기 -->
-
                 <div
                     class="
-                        p-12
+                        p-8
                         bg-gray-300/60
                         rounded-3xl
                         border
@@ -802,7 +658,8 @@
 
                     <div class="screen-preview-area">
 
-                        <!-- 화면 명찰 1 -->
+
+                        <!-- 명찰 1 -->
 
                         <div class="nametag-canvas shadow-md">
 
@@ -814,11 +671,11 @@
                                     src="스크린샷 2026-08-10 134338.png"
                                     alt="velyB Logo"
                                     class="w-[96%] h-auto max-h-[95%] object-contain"
-                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    onerror="hideBrokenImage(this)"
                                 >
 
                                 <div
-                                    class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none"
+                                    class="fallback-logo hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black"
                                 >
                                     vely<span class="font-bold">B</span>
                                 </div>
@@ -832,18 +689,18 @@
 
                                 <div
                                     id="posDisplay1"
-                                    class="position-text text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
+                                    class="text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
                                 >
                                     원장/의사
                                 </div>
 
                                 <div
-                                    class="divider border-b-2 border-black w-full mb-[0.08cm]"
+                                    class="border-b-2 border-black w-full mb-[0.08cm]"
                                 ></div>
 
                                 <div
                                     id="nameDisplay1"
-                                    class="name-text text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
+                                    class="text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
                                 >
                                     홍 하 린
                                 </div>
@@ -853,8 +710,7 @@
                         </div>
 
 
-
-                        <!-- 화면 명찰 2 -->
+                        <!-- 명찰 2 -->
 
                         <div class="nametag-canvas shadow-md">
 
@@ -866,11 +722,11 @@
                                     src="스크린샷 2026-08-10 134338.png"
                                     alt="velyB Logo"
                                     class="w-[96%] h-auto max-h-[95%] object-contain"
-                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    onerror="hideBrokenImage(this)"
                                 >
 
                                 <div
-                                    class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none"
+                                    class="fallback-logo hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black"
                                 >
                                     vely<span class="font-bold">B</span>
                                 </div>
@@ -884,18 +740,18 @@
 
                                 <div
                                     id="posDisplay2"
-                                    class="position-text text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
+                                    class="text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
                                 >
                                     원장/의사
                                 </div>
 
                                 <div
-                                    class="divider border-b-2 border-black w-full mb-[0.08cm]"
+                                    class="border-b-2 border-black w-full mb-[0.08cm]"
                                 ></div>
 
                                 <div
                                     id="nameDisplay2"
-                                    class="name-text text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
+                                    class="text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
                                 >
                                     변 윤 준
                                 </div>
@@ -905,8 +761,7 @@
                         </div>
 
 
-
-                        <!-- 화면 명찰 3 -->
+                        <!-- 명찰 3 -->
 
                         <div class="nametag-canvas shadow-md">
 
@@ -918,11 +773,11 @@
                                     src="스크린샷 2026-08-10 134338.png"
                                     alt="velyB Logo"
                                     class="w-[96%] h-auto max-h-[95%] object-contain"
-                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    onerror="hideBrokenImage(this)"
                                 >
 
                                 <div
-                                    class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none"
+                                    class="fallback-logo hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black"
                                 >
                                     vely<span class="font-bold">B</span>
                                 </div>
@@ -936,18 +791,18 @@
 
                                 <div
                                     id="posDisplay3"
-                                    class="position-text text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
+                                    class="text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
                                 >
                                     코디네이터
                                 </div>
 
                                 <div
-                                    class="divider border-b-2 border-black w-full mb-[0.08cm]"
+                                    class="border-b-2 border-black w-full mb-[0.08cm]"
                                 ></div>
 
                                 <div
                                     id="nameDisplay3"
-                                    class="name-text text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
+                                    class="text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
                                 >
                                     김 명 화
                                 </div>
@@ -957,8 +812,7 @@
                         </div>
 
 
-
-                        <!-- 화면 명찰 4 -->
+                        <!-- 명찰 4 -->
 
                         <div class="nametag-canvas shadow-md">
 
@@ -970,11 +824,11 @@
                                     src="스크린샷 2026-08-10 134338.png"
                                     alt="velyB Logo"
                                     class="w-[96%] h-auto max-h-[95%] object-contain"
-                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    onerror="hideBrokenImage(this)"
                                 >
 
                                 <div
-                                    class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none"
+                                    class="fallback-logo hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black"
                                 >
                                     vely<span class="font-bold">B</span>
                                 </div>
@@ -988,18 +842,18 @@
 
                                 <div
                                     id="posDisplay4"
-                                    class="position-text text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
+                                    class="text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
                                 >
                                     간호조무사
                                 </div>
 
                                 <div
-                                    class="divider border-b-2 border-black w-full mb-[0.08cm]"
+                                    class="border-b-2 border-black w-full mb-[0.08cm]"
                                 ></div>
 
                                 <div
                                     id="nameDisplay4"
-                                    class="name-text text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
+                                    class="text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
                                 >
                                     송 수 진
                                 </div>
@@ -1013,11 +867,9 @@
                 </div>
 
 
-                <p class="text-sm text-gray-500 mt-14 text-center">
-                    명찰 실제 사이즈
+                <p class="text-sm text-gray-500 mt-12 text-center">
+                    명찰 실제 크기
                     <strong>6.8cm × 2.91cm</strong>
-                    <br>
-                    화면에서는 보기 편하도록 확대되어 표시됩니다.
                 </p>
 
             </div>
@@ -1027,229 +879,36 @@
     </div>
 
 
-
-    <!-- =========================================================
-         =========================================================
-         인쇄 전용 영역
-         
-         ★ 핵심 수정 부분 ★
-         
-         기존에는 이 영역이 no-print 부모 안에 있어서
-         부모가 display:none 되면서 인쇄할 명찰도 사라졌음.
-         
-         이제 화면 UI와 완전히 분리되어 있음.
-         =========================================================
-         ========================================================= -->
-
-    <div
-        id="printArea"
-        class="print-only-area"
-    >
-
-        <!-- 인쇄 명찰 1 -->
-
-        <div class="nametag-canvas">
-
-            <div class="logo-area w-[52%] h-full flex justify-center items-center px-[0.02cm]">
-
-                <img
-                    src="스크린샷 2026-08-10 134338.png"
-                    alt="velyB Logo"
-                    class="w-[96%] h-auto max-h-[95%] object-contain"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                >
-
-                <div
-                    class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none"
-                >
-                    vely<span class="font-bold">B</span>
-                </div>
-
-            </div>
-
-
-            <div class="text-area w-[48%] h-full flex flex-col justify-center pl-[0.02cm] pr-[0.08cm]">
-
-                <div
-                    id="printPos1"
-                    class="position-text text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
-                >
-                    원장/의사
-                </div>
-
-                <div
-                    class="divider border-b-2 border-black w-full mb-[0.08cm]"
-                ></div>
-
-                <div
-                    id="printName1"
-                    class="name-text text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
-                >
-                    홍 하 린
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- 인쇄 명찰 2 -->
-
-        <div class="nametag-canvas">
-
-            <div class="logo-area w-[52%] h-full flex justify-center items-center px-[0.02cm]">
-
-                <img
-                    src="스크린샷 2026-08-10 134338.png"
-                    alt="velyB Logo"
-                    class="w-[96%] h-auto max-h-[95%] object-contain"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                >
-
-                <div
-                    class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none"
-                >
-                    vely<span class="font-bold">B</span>
-                </div>
-
-            </div>
-
-
-            <div class="text-area w-[48%] h-full flex flex-col justify-center pl-[0.02cm] pr-[0.08cm]">
-
-                <div
-                    id="printPos2"
-                    class="position-text text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
-                >
-                    원장/의사
-                </div>
-
-                <div
-                    class="divider border-b-2 border-black w-full mb-[0.08cm]"
-                ></div>
-
-                <div
-                    id="printName2"
-                    class="name-text text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
-                >
-                    변 윤 준
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- 인쇄 명찰 3 -->
-
-        <div class="nametag-canvas">
-
-            <div class="logo-area w-[52%] h-full flex justify-center items-center px-[0.02cm]">
-
-                <img
-                    src="스크린샷 2026-08-10 134338.png"
-                    alt="velyB Logo"
-                    class="w-[96%] h-auto max-h-[95%] object-contain"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                >
-
-                <div
-                    class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none"
-                >
-                    vely<span class="font-bold">B</span>
-                </div>
-
-            </div>
-
-
-            <div class="text-area w-[48%] h-full flex flex-col justify-center pl-[0.02cm] pr-[0.08cm]">
-
-                <div
-                    id="printPos3"
-                    class="position-text text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
-                >
-                    코디네이터
-                </div>
-
-                <div
-                    class="divider border-b-2 border-black w-full mb-[0.08cm]"
-                ></div>
-
-                <div
-                    id="printName3"
-                    class="name-text text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
-                >
-                    김 명 화
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- 인쇄 명찰 4 -->
-
-        <div class="nametag-canvas">
-
-            <div class="logo-area w-[52%] h-full flex justify-center items-center px-[0.02cm]">
-
-                <img
-                    src="스크린샷 2026-08-10 134338.png"
-                    alt="velyB Logo"
-                    class="w-[96%] h-auto max-h-[95%] object-contain"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                >
-
-                <div
-                    class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none"
-                >
-                    vely<span class="font-bold">B</span>
-                </div>
-
-            </div>
-
-
-            <div class="text-area w-[48%] h-full flex flex-col justify-center pl-[0.02cm] pr-[0.08cm]">
-
-                <div
-                    id="printPos4"
-                    class="position-text text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap"
-                >
-                    간호조무사
-                </div>
-
-                <div
-                    class="divider border-b-2 border-black w-full mb-[0.08cm]"
-                ></div>
-
-                <div
-                    id="printName4"
-                    class="name-text text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap"
-                >
-                    송 수 진
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
     <!-- =========================================================
          JavaScript
          ========================================================= -->
 
     <script>
 
-        /*
-         * 입력값 → 화면 미리보기 + 인쇄 영역
-         * 동시에 업데이트
-         */
+        /* =========================================================
+           이미지 오류 처리
+           ========================================================= */
+
+        function hideBrokenImage(img) {
+
+            img.style.display = 'none';
+
+            const fallback =
+                img.nextElementSibling;
+
+            if (fallback) {
+
+                fallback.classList.remove('hidden');
+                fallback.classList.add('flex');
+
+            }
+
+        }
+
+
+        /* =========================================================
+           입력값 실시간 반영
+           ========================================================= */
 
         [1, 2, 3, 4].forEach(index => {
 
@@ -1259,7 +918,6 @@
             const nameInput =
                 document.getElementById(`name${index}`);
 
-
             const posDisplay =
                 document.getElementById(`posDisplay${index}`);
 
@@ -1267,75 +925,442 @@
                 document.getElementById(`nameDisplay${index}`);
 
 
-            const printPos =
-                document.getElementById(`printPos${index}`);
-
-            const printName =
-                document.getElementById(`printName${index}`);
-
-
-            /* 직책 */
-
             posInput.addEventListener('input', function () {
 
-                const value =
+                posDisplay.textContent =
                     this.value || '\u00A0';
-
-                posDisplay.textContent = value;
-                printPos.textContent = value;
 
             });
 
-
-            /* 이름 */
 
             nameInput.addEventListener('input', function () {
 
-                const value =
+                nameDisplay.textContent =
                     this.value || '\u00A0';
 
-                nameDisplay.textContent = value;
-                printName.textContent = value;
-
             });
 
         });
 
 
-        /*
-         * 인쇄 직전에 한 번 더 데이터를 동기화
-         *
-         * 브라우저가 인쇄 미리보기를 만들기 전에
-         * 최신 입력값을 확실하게 반영합니다.
-         */
+        /* =========================================================
+           인쇄 함수
+           
+           ★ 핵심 ★
+           
+           기존 window.print()를 사용하지 않습니다.
+           새로운 인쇄 전용 창을 만들고
+           명찰만 넣어서 인쇄합니다.
+           ========================================================= */
 
-        window.addEventListener('beforeprint', function () {
+        function printNameTags() {
 
-            [1, 2, 3, 4].forEach(index => {
-
-                const posInput =
-                    document.getElementById(`pos${index}`);
-
-                const nameInput =
-                    document.getElementById(`name${index}`);
+            const tags = [];
 
 
-                const printPos =
-                    document.getElementById(`printPos${index}`);
+            for (let i = 1; i <= 4; i++) {
 
-                const printName =
-                    document.getElementById(`printName${index}`);
+                const position =
+                    document.getElementById(`pos${i}`).value.trim();
+
+                const name =
+                    document.getElementById(`name${i}`).value.trim();
 
 
-                printPos.textContent =
-                    posInput.value || '\u00A0';
+                tags.push({
+                    position: position || ' ',
+                    name: name || ' '
+                });
 
-                printName.textContent =
-                    nameInput.value || '\u00A0';
+            }
 
-            });
 
-        });
+            /*
+             * 현재 페이지의 로고 경로
+             */
+
+            const logoSrc =
+                '스크린샷 2026-08-10 134338.png';
+
+
+            /*
+             * 인쇄용 명찰 HTML 생성
+             */
+
+            const tagHTML = tags.map(tag => {
+
+                return `
+                    <div class="nametag">
+
+                        <div class="logo-area">
+
+                            <img
+                                src="${logoSrc}"
+                                onerror="this.style.display='none';"
+                            >
+
+                        </div>
+
+
+                        <div class="text-area">
+
+                            <div class="position">
+                                ${escapeHTML(tag.position)}
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div class="name">
+                                ${escapeHTML(tag.name)}
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }).join('');
+
+
+            /*
+             * 인쇄용 새 창
+             */
+
+            const printWindow =
+                window.open(
+                    '',
+                    '_blank',
+                    'width=900,height=1000'
+                );
+
+
+            if (!printWindow) {
+
+                alert(
+                    '인쇄 창이 차단되었습니다.\n\n브라우저에서 팝업을 허용한 후 다시 눌러주세요.'
+                );
+
+                return;
+            }
+
+
+            /*
+             * 인쇄용 HTML
+             */
+
+            printWindow.document.open();
+
+
+            printWindow.document.write(`
+
+                <!DOCTYPE html>
+
+                <html lang="ko">
+
+                <head>
+
+                    <meta charset="UTF-8">
+
+                    <title>블리비 명찰 인쇄</title>
+
+                    <link
+                        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap"
+                        rel="stylesheet"
+                    >
+
+                    <style>
+
+                        @page {
+
+                            size: A4 portrait;
+
+                            margin: 0;
+
+                        }
+
+
+                        * {
+
+                            box-sizing: border-box;
+
+                        }
+
+
+                        html,
+                        body {
+
+                            margin: 0;
+
+                            padding: 0;
+
+                            width: 210mm;
+
+                            min-height: 297mm;
+
+                            background: white;
+
+                        }
+
+
+                        body {
+
+                            font-family:
+                                'Noto Sans KR',
+                                sans-serif;
+
+                            padding-left: 10mm;
+
+                            padding-top: 10mm;
+
+                        }
+
+
+                        .print-area {
+
+                            width: 140mm;
+
+                            display: grid;
+
+                            grid-template-columns:
+                                68mm 68mm;
+
+                            grid-template-rows:
+                                29.1mm 29.1mm;
+
+                            column-gap: 4mm;
+
+                            row-gap: 4mm;
+
+                        }
+
+
+                        .nametag {
+
+                            width: 68mm;
+
+                            height: 29.1mm;
+
+                            min-width: 68mm;
+
+                            min-height: 29.1mm;
+
+                            max-width: 68mm;
+
+                            max-height: 29.1mm;
+
+                            display: flex;
+
+                            align-items: center;
+
+                            padding: 1mm;
+
+                            background: white;
+
+                            border:
+                                0.3mm
+                                solid
+                                #000;
+
+                            overflow: hidden;
+
+                            page-break-inside: avoid;
+
+                            break-inside: avoid;
+
+                        }
+
+
+                        .logo-area {
+
+                            width: 52%;
+
+                            height: 100%;
+
+                            display: flex;
+
+                            justify-content: center;
+
+                            align-items: center;
+
+                            flex-shrink: 0;
+
+                        }
+
+
+                        .logo-area img {
+
+                            max-width: 96%;
+
+                            max-height: 95%;
+
+                            width: auto;
+
+                            height: auto;
+
+                            object-fit: contain;
+
+                        }
+
+
+                        .text-area {
+
+                            width: 48%;
+
+                            height: 100%;
+
+                            display: flex;
+
+                            flex-direction: column;
+
+                            justify-content: center;
+
+                            flex-shrink: 0;
+
+                            padding-left: 0.5mm;
+
+                            padding-right: 0.8mm;
+
+                        }
+
+
+                        .position {
+
+                            font-size: 5.5mm;
+
+                            font-weight: 700;
+
+                            line-height: 1.1;
+
+                            white-space: nowrap;
+
+                            color: #111;
+
+                        }
+
+
+                        .divider {
+
+                            width: 100%;
+
+                            border-bottom:
+                                0.5mm
+                                solid
+                                #000;
+
+                            margin-top: 0.5mm;
+
+                            margin-bottom: 0.8mm;
+
+                        }
+
+
+                        .name {
+
+                            font-size: 8.2mm;
+
+                            font-weight: 700;
+
+                            line-height: 1;
+
+                            white-space: nowrap;
+
+                            color: #000;
+
+                            letter-spacing: 0.5mm;
+
+                        }
+
+
+                        @media print {
+
+                            html,
+                            body {
+
+                                width: 210mm;
+
+                                height: 297mm;
+
+                                margin: 0;
+
+                                padding-left: 10mm;
+
+                                padding-top: 10mm;
+
+                            }
+
+                        }
+
+                    </style>
+
+                </head>
+
+
+                <body>
+
+                    <div class="print-area">
+
+                        ${tagHTML}
+
+                    </div>
+
+
+                    <script>
+
+                        /*
+                         * 로고와 폰트가 로드된 후 인쇄
+                         */
+
+                        window.onload = function() {
+
+                            setTimeout(function() {
+
+                                window.focus();
+
+                                window.print();
+
+                            }, 500);
+
+                        };
+
+
+                        window.onafterprint = function() {
+
+                            setTimeout(function() {
+
+                                window.close();
+
+                            }, 300);
+
+                        };
+
+                    <\/script>
+
+                </body>
+
+                </html>
+
+            `);
+
+
+            printWindow.document.close();
+
+        }
+
+
+        /* =========================================================
+           HTML 특수문자 처리
+           ========================================================= */
+
+        function escapeHTML(value) {
+
+            return value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+
+        }
 
     </script>
 
