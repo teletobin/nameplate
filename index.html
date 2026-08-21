@@ -13,22 +13,22 @@
             background-color: #f3f4f6;
         }
 
-        /* 명찰 1개 물리적 사이즈 고정 (가로 6.8cm, 세로 2.91cm) */
+        /* 명찰 1개 물리적 규격 (가로 6.8cm, 세로 2.91cm) */
         .nametag-canvas {
             width: 6.8cm;
             height: 2.91cm;
             background-color: white;
-            border: 1px solid #a1a1aa; /* 회색 테두리 */
+            border: 1px solid #a1a1aa;
             box-sizing: border-box;
             display: flex;
             align-items: center;
-            padding: 0.15cm;
+            padding: 0.1cm;
             position: relative;
             overflow: hidden;
             flex-shrink: 0;
         }
 
-        /* 인쇄 전용 스타일 */
+        /* 인쇄 스타일 설정 */
         @media print {
             body {
                 background-color: white !important;
@@ -36,12 +36,11 @@
                 padding: 0 !important;
             }
 
-            /* 편집 화면 및 UI 요소 전면 숨김 */
             .no-print {
                 display: none !important;
             }
 
-            /* 인쇄 영역만 정확히 화면 최상단에 2x2 격자로 배치 */
+            /* 인쇄 시 스케일 원복 및 A4 상단 배치 */
             .print-area {
                 position: absolute !important;
                 left: 1cm !important;
@@ -53,16 +52,17 @@
                 padding: 0 !important;
                 background: transparent !important;
                 box-shadow: none !important;
+                transform: none !important; /* 화면 확대 효과 원복 */
+                border: none !important;
             }
 
             .nametag-canvas {
-                border: 1px solid #000 !important; /* 인쇄 시 선명한 검은색 테두리 */
+                border: 1px solid #000 !important;
                 box-shadow: none !important;
                 page-break-inside: avoid;
                 break-inside: avoid;
             }
 
-            /* 페이지 여백 설정 및 A4 세로 인쇄 규격 */
             @page {
                 size: A4 portrait;
                 margin: 0mm; 
@@ -70,177 +70,186 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+<body class="min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 md:p-6">
 
-    <!-- 메인 컨테이너 -->
-    <div class="w-full max-w-6xl bg-white rounded-xl shadow-xl overflow-hidden flex flex-col lg:flex-row no-print my-auto">
+    <!-- 메인 컨테이너: 좌측 슬림 폼 + 우측 대형 프리뷰 -->
+    <div class="w-full max-w-[1600px] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row no-print my-auto min-h-[85vh]">
         
-        <!-- 왼쪽: 4개 명찰 입력 폼 (편집창) -->
-        <div class="w-full lg:w-1/2 p-6 bg-gray-50 border-r border-gray-200 flex flex-col max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
-                <h1 class="text-2xl font-normal text-gray-900 tracking-tight">
-                    블리비 임시명찰
-                </h1>
-                <span class="text-xs bg-black text-white px-2.5 py-1 rounded-full font-bold">동시 4개 제작</span>
+        <!-- 왼쪽: 컴팩트 4개 명찰 입력 폼 (슬림 레이아웃) -->
+        <div class="w-full lg:w-[320px] xl:w-[350px] p-4 bg-gray-50 border-r border-gray-200 flex flex-col justify-between flex-shrink-0">
+            <div>
+                <!-- 타이틀 -->
+                <div class="mb-3 pb-2 border-b border-gray-200">
+                    <h1 class="text-xl font-bold text-gray-900 tracking-tight">
+                        블리비 임시명찰
+                    </h1>
+                    <p class="text-[11px] text-gray-500 mt-0.5">4개 동시 작성 및 일괄 인쇄</p>
+                </div>
+
+                <!-- 입력 항목 1~4 (슬림 스타일) -->
+                <div class="space-y-2.5">
+                    
+                    <!-- 명찰 #1 -->
+                    <div class="p-2.5 bg-white rounded-lg border border-gray-200 shadow-sm space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold text-gray-700">명찰 #1</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-medium text-gray-500 mb-0.5">직책</label>
+                                <input type="text" id="pos1" value="원장/의사" placeholder="원장/의사" class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-black outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-medium text-gray-500 mb-0.5">이름</label>
+                                <input type="text" id="name1" value="홍 하 린" placeholder="홍 하 린" class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-black outline-none">
+                            </div>
+                        </div>
+                        <p class="text-[9.5px] text-gray-400">원장/의사 또는 코디네이터/간호조무사/피부관리사</p>
+                    </div>
+
+                    <!-- 명찰 #2 -->
+                    <div class="p-2.5 bg-white rounded-lg border border-gray-200 shadow-sm space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold text-gray-700">명찰 #2</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-medium text-gray-500 mb-0.5">직책</label>
+                                <input type="text" id="pos2" value="원장/의사" placeholder="원장/의사" class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-black outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-medium text-gray-500 mb-0.5">이름</label>
+                                <input type="text" id="name2" value="변 윤 준" placeholder="변 윤 준" class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-black outline-none">
+                            </div>
+                        </div>
+                        <p class="text-[9.5px] text-gray-400">원장/의사 또는 코디네이터/간호조무사/피부관리사</p>
+                    </div>
+
+                    <!-- 명찰 #3 -->
+                    <div class="p-2.5 bg-white rounded-lg border border-gray-200 shadow-sm space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold text-gray-700">명찰 #3</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-medium text-gray-500 mb-0.5">직책</label>
+                                <input type="text" id="pos3" value="코디네이터" placeholder="코디네이터" class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-black outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-medium text-gray-500 mb-0.5">이름</label>
+                                <input type="text" id="name3" value="김 명 화" placeholder="김 명 화" class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-black outline-none">
+                            </div>
+                        </div>
+                        <p class="text-[9.5px] text-gray-400">원장/의사 또는 코디네이터/간호조무사/피부관리사</p>
+                    </div>
+
+                    <!-- 명찰 #4 -->
+                    <div class="p-2.5 bg-white rounded-lg border border-gray-200 shadow-sm space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold text-gray-700">명찰 #4</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-medium text-gray-500 mb-0.5">직책</label>
+                                <input type="text" id="pos4" value="간호조무사" placeholder="간호조무사" class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-black outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-medium text-gray-500 mb-0.5">이름</label>
+                                <input type="text" id="name4" value="송 수 진" placeholder="송 수 진" class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-black outline-none">
+                            </div>
+                        </div>
+                        <p class="text-[9.5px] text-gray-400">원장/의사 또는 코디네이터/간호조무사/피부관리사</p>
+                    </div>
+
+                </div>
             </div>
 
-            <!-- 입력 항목 1~4 -->
-            <div class="space-y-4 flex-1 overflow-y-auto pr-1">
-                
-                <!-- 명찰 1 -->
-                <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">명찰 #1</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">직책 / 포지션</label>
-                            <input type="text" id="pos1" value="원장/의사" placeholder="원장/의사" class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-black outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">이 름</label>
-                            <input type="text" id="name1" value="망 곰 이" placeholder="망 곰 이" class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-black outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 명찰 2 -->
-                <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">명찰 #2</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">직책 / 포지션</label>
-                            <input type="text" id="pos2" value="피부관리사" placeholder="피부관리사" class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-black outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">이 름</label>
-                            <input type="text" id="name2" value="김 블 리" placeholder="김 블 리" class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-black outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 명찰 3 -->
-                <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">명찰 #3</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">직책 / 포지션</label>
-                            <input type="text" id="pos3" value="코디네이터" placeholder="코디네이터" class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-black outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">이 름</label>
-                            <input type="text" id="name3" value="피 카 츄" placeholder="피 카 츄 " class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-black outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 명찰 4 -->
-                <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">명찰 #4</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">직책 / 포지션</label>
-                            <input type="text" id="pos4" value="간호조무사" placeholder="간호조무사" class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-black outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">이 름</label>
-                            <input type="text" id="name4" value="포 차 코" placeholder="포 차 코" class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-black outline-none">
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- 안내 멘트 & 인쇄 버튼 -->
-            <div class="pt-4 mt-2 border-t border-gray-200 space-y-3">
-                <p class="text-xs text-gray-500 bg-gray-100 p-2.5 rounded text-center">
-                     직책/포지션 : <strong>원장/의사</strong> 또는 <strong>코디네이터 / 간호조무사 / 피부관리사</strong><br>
-                    * 이름 입력 시 글자 사이에 공백을 넣어주세요. (예: 김 블 리)
-                </p>
-                <button onclick="window.print()" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition flex justify-center items-center text-base">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <!-- 하단 인쇄 버튼 -->
+            <div class="pt-3 mt-3 border-t border-gray-200">
+                <button onclick="window.print()" class="w-full bg-black hover:bg-gray-800 text-white font-semibold py-2.5 px-3 rounded-lg shadow-md transition flex justify-center items-center text-sm">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
-                    4개 명찰 한꺼번에 인쇄
+                    명찰 인쇄
                 </button>
             </div>
         </div>
 
-        <!-- 오른쪽: 실시간 4개 명찰 미리보기 (인쇄 시 이 영역만 그대로 출력됨) -->
-        <div class="w-full lg:w-1/2 p-6 bg-gray-200 flex flex-col items-center justify-center min-h-[450px]">
-            <h2 class="text-xs font-bold text-gray-500 mb-4 tracking-wider uppercase text-center">실제 인쇄 미리보기 (2x2 배치 / 개당 6.8 x 2.91cm)</h2>
+        <!-- 오른쪽: 대형 확장 미리보기 패널 -->
+        <div class="flex-1 p-6 md:p-10 lg:p-12 bg-gray-200 flex flex-col items-center justify-center overflow-auto min-h-[500px]">
+            <div class="text-center mb-6">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider bg-gray-300/70 px-3 py-1 rounded-full">실제 인쇄 미리보기</span>
+            </div>
             
-            <!-- 인쇄 타깃 영역 (print-area) -->
-            <div class="print-area grid grid-cols-1 sm:grid-cols-2 gap-3 p-2 bg-gray-300 rounded-lg shadow-inner border border-gray-300">
+            <!-- 인쇄 영역 및 적절한 미리보기 래퍼 -->
+            <div class="p-6 md:p-8 bg-gray-300/60 rounded-2xl border border-gray-300 flex items-center justify-center overflow-visible">
                 
-                <!-- 명찰 1 Canvas -->
-                <div class="nametag-canvas shadow-sm">
-                    <div class="w-[48%] h-full flex justify-center items-center px-[0.05cm]">
-                        <img src="스크린샷 2026-08-10 134338.png" alt="velyB Logo" class="w-full h-auto max-h-[92%] object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="hidden w-full h-full items-center justify-center font-bold text-[0.85cm] tracking-tighter text-black select-none leading-none">vely<span class="font-bold">B</span></div>
+                <div class="print-area grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 my-auto transition-all">
+                    
+                    <!-- 명찰 1 Canvas -->
+                    <div class="nametag-canvas shadow-md">
+                        <div class="w-[52%] h-full flex justify-center items-center px-[0.02cm]">
+                            <img src="스크린샷 2026-08-10 134338.png" alt="velyB Logo" class="w-[96%] h-auto max-h-[95%] object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none">vely<span class="font-bold">B</span></div>
+                        </div>
+                        <div class="w-[48%] h-full flex flex-col justify-center pl-[0.02cm] pr-[0.08cm]">
+                            <div id="posDisplay1" class="text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap">원장/의사</div>
+                            <div class="border-b-2 border-black w-full mb-[0.08cm]"></div>
+                            <div id="nameDisplay1" class="text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap">홍 하 린</div>
+                        </div>
                     </div>
-                    <div class="w-[52%] h-full flex flex-col justify-center pl-[0.05cm] pr-[0.1cm]">
-                        <div id="posDisplay1" class="text-[0.52cm] text-gray-900 font-bold leading-tight mb-[0.06cm] pl-[0.05cm] whitespace-nowrap">원장/의사</div>
-                        <div class="border-b-2 border-black w-full mb-[0.08cm]"></div>
-                        <div id="nameDisplay1" class="text-[0.78cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap">망 곰 이</div>
-                    </div>
-                </div>
 
-                <!-- 명찰 2 Canvas -->
-                <div class="nametag-canvas shadow-sm">
-                    <div class="w-[48%] h-full flex justify-center items-center px-[0.05cm]">
-                        <img src="스크린샷 2026-08-10 134338.png" alt="velyB Logo" class="w-full h-auto max-h-[92%] object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="hidden w-full h-full items-center justify-center font-bold text-[0.85cm] tracking-tighter text-black select-none leading-none">vely<span class="font-bold">B</span></div>
+                    <!-- 명찰 2 Canvas -->
+                    <div class="nametag-canvas shadow-md">
+                        <div class="w-[52%] h-full flex justify-center items-center px-[0.02cm]">
+                            <img src="스크린샷 2026-08-10 134338.png" alt="velyB Logo" class="w-[96%] h-auto max-h-[95%] object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none">vely<span class="font-bold">B</span></div>
+                        </div>
+                        <div class="w-[48%] h-full flex flex-col justify-center pl-[0.02cm] pr-[0.08cm]">
+                            <div id="posDisplay2" class="text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap">원장/의사</div>
+                            <div class="border-b-2 border-black w-full mb-[0.08cm]"></div>
+                            <div id="nameDisplay2" class="text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap">변 윤 준</div>
+                        </div>
                     </div>
-                    <div class="w-[52%] h-full flex flex-col justify-center pl-[0.05cm] pr-[0.1cm]">
-                        <div id="posDisplay2" class="text-[0.52cm] text-gray-900 font-bold leading-tight mb-[0.06cm] pl-[0.05cm] whitespace-nowrap">피부관리사</div>
-                        <div class="border-b-2 border-black w-full mb-[0.08cm]"></div>
-                        <div id="nameDisplay2" class="text-[0.78cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap">김 블 리</div>
-                    </div>
-                </div>
 
-                <!-- 명찰 3 Canvas -->
-                <div class="nametag-canvas shadow-sm">
-                    <div class="w-[48%] h-full flex justify-center items-center px-[0.05cm]">
-                        <img src="스크린샷 2026-08-10 134338.png" alt="velyB Logo" class="w-full h-auto max-h-[92%] object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="hidden w-full h-full items-center justify-center font-bold text-[0.85cm] tracking-tighter text-black select-none leading-none">vely<span class="font-bold">B</span></div>
+                    <!-- 명찰 3 Canvas -->
+                    <div class="nametag-canvas shadow-md">
+                        <div class="w-[52%] h-full flex justify-center items-center px-[0.02cm]">
+                            <img src="스크린샷 2026-08-10 134338.png" alt="velyB Logo" class="w-[96%] h-auto max-h-[95%] object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none">vely<span class="font-bold">B</span></div>
+                        </div>
+                        <div class="w-[48%] h-full flex flex-col justify-center pl-[0.02cm] pr-[0.08cm]">
+                            <div id="posDisplay3" class="text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap">코디네이터</div>
+                            <div class="border-b-2 border-black w-full mb-[0.08cm]"></div>
+                            <div id="nameDisplay3" class="text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap">김 명 화</div>
+                        </div>
                     </div>
-                    <div class="w-[52%] h-full flex flex-col justify-center pl-[0.05cm] pr-[0.1cm]">
-                        <div id="posDisplay3" class="text-[0.52cm] text-gray-900 font-bold leading-tight mb-[0.06cm] pl-[0.05cm] whitespace-nowrap">코디네이터</div>
-                        <div class="border-b-2 border-black w-full mb-[0.08cm]"></div>
-                        <div id="nameDisplay3" class="text-[0.78cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap">피 카 츄</div>
-                    </div>
-                </div>
 
-                <!-- 명찰 4 Canvas -->
-                <div class="nametag-canvas shadow-sm">
-                    <div class="w-[48%] h-full flex justify-center items-center px-[0.05cm]">
-                        <img src="스크린샷 2026-08-10 134338.png" alt="velyB Logo" class="w-full h-auto max-h-[92%] object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="hidden w-full h-full items-center justify-center font-bold text-[0.85cm] tracking-tighter text-black select-none leading-none">vely<span class="font-bold">B</span></div>
+                    <!-- 명찰 4 Canvas -->
+                    <div class="nametag-canvas shadow-md">
+                        <div class="w-[52%] h-full flex justify-center items-center px-[0.02cm]">
+                            <img src="스크린샷 2026-08-10 134338.png" alt="velyB Logo" class="w-[96%] h-auto max-h-[95%] object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hidden w-full h-full items-center justify-center font-bold text-[0.95cm] tracking-tighter text-black select-none leading-none">vely<span class="font-bold">B</span></div>
+                        </div>
+                        <div class="w-[48%] h-full flex flex-col justify-center pl-[0.02cm] pr-[0.08cm]">
+                            <div id="posDisplay4" class="text-[0.55cm] text-gray-900 font-bold leading-tight mb-[0.05cm] pl-[0.05cm] whitespace-nowrap">간호조무사</div>
+                            <div class="border-b-2 border-black w-full mb-[0.08cm]"></div>
+                            <div id="nameDisplay4" class="text-[0.82cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap">송 수 진</div>
+                        </div>
                     </div>
-                    <div class="w-[52%] h-full flex flex-col justify-center pl-[0.05cm] pr-[0.1cm]">
-                        <div id="posDisplay4" class="text-[0.52cm] text-gray-900 font-bold leading-tight mb-[0.06cm] pl-[0.05cm] whitespace-nowrap">간호조무사</div>
-                        <div class="border-b-2 border-black w-full mb-[0.08cm]"></div>
-                        <div id="nameDisplay4" class="text-[0.78cm] text-black font-bold leading-none tracking-widest pl-[0.05cm] whitespace-nowrap">포 차 코</div>
-                    </div>
+
                 </div>
 
             </div>
 
-            <p class="text-xs text-gray-500 mt-5 text-center max-w-xs">
-                🖨️ 인쇄 팁: 브라우저 인쇄 설정에서 <strong>'배경 그래픽 인쇄'</strong> 선택, <strong>'여백: 없음'</strong> 설정 시 규격에 딱 맞춰 출력됩니다.
+            <p class="text-xs text-gray-500 mt-8 text-center">
+                명찰 사이즈에 맞게 (6.8cm x 2.91cm) 인쇄됩니다.
             </p>
         </div>
     </div>
 
     <script>
-        // 4개 명찰 입력 필드와 미리보기 연결
+        // 4개 명찰 실시간 동기화
         [1, 2, 3, 4].forEach(index => {
             const posInput = document.getElementById(`pos${index}`);
             const nameInput = document.getElementById(`name${index}`);
